@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
+import { TipType } from './types';
 import renderTip from './utils/renderTip';
-import { themeMappingTypes } from './types';
 
 export default class implements vscode.HoverProvider {
   public themeConfig: any;
-  constructor(themeConfig: any) {
+  constructor(themeConfig: Map<string, TipType> | null) {
     this.themeConfig = themeConfig;
     console.log('----this.themeConfig--', this.themeConfig);
   }
@@ -16,7 +16,7 @@ export default class implements vscode.HoverProvider {
 		if (range) {
 			const token = doc.getText(new vscode.Range(range.start.translate(0, 1), range.end));
 			console.log('--token--', token);
-			const tip: any = this.themeConfig[token];
+			const tip = this.themeConfig.get(token);
 			if (tip) {
 				return new vscode.Hover(renderTip(tip));
 			}

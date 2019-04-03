@@ -13,9 +13,12 @@ export async function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "vscode-less" is now active!');
   const loadTheme = new LoadTheme();
-
+  const theme = await loadTheme.getThemeConfig();
   context.subscriptions.push(
-      vscode.languages.registerHoverProvider('less', new HoverProvider(await loadTheme.getThemeConfig())),
+      vscode.languages.registerHoverProvider({
+        scheme: 'file',
+        language: 'less',
+      }, new HoverProvider(theme)),
   );
 }
 
