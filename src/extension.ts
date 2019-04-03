@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import HoverProvider from './HoverProvider';
+import CompletionProvider from './CompletionProvider';
 import LoadTheme from './LoadTheme';
 
 // this method is called when your extension is activated
@@ -19,6 +20,10 @@ export async function activate(context: vscode.ExtensionContext) {
         scheme: 'file',
         language: 'less',
       }, new HoverProvider(theme)),
+      vscode.languages.registerCompletionItemProvider({
+        scheme: 'file',
+        language: 'less',
+      }, new CompletionProvider(theme), '@'),
   );
 }
 
