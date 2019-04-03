@@ -26,6 +26,12 @@ const translate = async (sheet: string): Promise<themeMappingTypes> => {
       }
     });
   }
+  Object.keys(themeMappings).forEach(theme => {
+    const { value } = themeMappings[theme];
+    if (value && value.indexOf('@') > -1) {
+      themeMappings[theme] = themeMappings[value.replace('@', '')];
+    }
+  });
   return themeMappings;
 };
 
