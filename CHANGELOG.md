@@ -1,7 +1,8 @@
-# Change Log
-All notable changes to the "vscode-less" extension will be documented in this file.
+0.0.1 / 2019-04-04
+==================
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-- Initial release
+  * feat: trigger complement
+  * feat: trigger
+  * feat: use Map
+  * fix: 处理变量重复
+  * feat: init
