@@ -8,10 +8,10 @@ export default class CompletionProvider implements vscode.CompletionItemProvider
       themeConfig.forEach((theme, key) => {
         const { value, comment } = theme;
         this.themeConfig.push({
-          label: key,
+          label: `@${key} - ${value}`,
           kind: 1,
           documentation: comment,
-          insertText: new vscode.SnippetString(key)
+          insertText: new vscode.SnippetString(`@${key}`)
         });
       });
     }
@@ -26,17 +26,9 @@ export default class CompletionProvider implements vscode.CompletionItemProvider
     if (doc.languageId !== 'less') {
       return [] as any;
     }
-    const char = context.triggerCharacter;
-    console.log('---char--', char);
-    if (char === '@' && this.themeConfig) {
-      return new Promise((resolve, reject) => {
-        resolve(this.themeConfig);
-      });
-    }
+    return this.themeConfig;
   }
-  resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken): Thenable<vscode.CompletionItem> {
-    return new Promise((resolve, reject) => {
-      resolve(item);
-    });
+  resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken) {
+    return item;
   }
 }
