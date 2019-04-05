@@ -11,7 +11,7 @@ export default class CompletionProvider implements vscode.CompletionItemProvider
           label: `@${key} - ${value}`,
           kind: 1,
           documentation: comment,
-          insertText: new vscode.SnippetString(`@${key}`)
+          insertText: new vscode.SnippetString(`@${key};`)
         });
       });
     }
