@@ -14,16 +14,33 @@ export async function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "vscode-less" is now active!');
   const loadTheme = new LoadTheme();
-  const theme = await loadTheme.getThemeConfig();
+  let theme = null;
+  let themeFilename = null;
+  let type = null;
+  try {
+    theme = await loadTheme.getThemeConfig();
+    themeFilename = loadTheme.themeUserPath;
+    type = loadTheme.typeUserConfig;
+  } catch (e) {
+    console.log('error', e);
+  }
+  console.log('----theme--', theme, themeFilename);
+  const selector = {
+    scheme: 'file',
+    language: type || 'less',
+    // pattern: `**/*.${type}`,
+  };
+  console.log('-----selector-', selector);
   context.subscriptions.push(
-      vscode.languages.registerHoverProvider({
-        scheme: 'file',
-        language: 'less',
-      }, new HoverProvider(theme)),
-      vscode.languages.registerCompletionItemProvider({
-        scheme: 'file',
-        language: 'less',
-      }, new CompletionProvider(theme), '@'),
+      vscode.languages.registerHoverProvider(
+        selector,
+        new HoverProvider(theme),
+      ),
+      vscode.languages.registerCompletionItemProvider(
+        selector,
+        new CompletionProvider(theme, type as any),
+        '@',
+      ),
   );
 }
 

@@ -1,9 +1,13 @@
 import * as vscode from 'vscode';
-import { TipType } from './types';
+import { TipType, IType } from './types';
 
 export default class CompletionProvider implements vscode.CompletionItemProvider {
+  public type: IType | null;
   public themeConfig: vscode.CompletionItem[] = [];
-  constructor(themeConfig: Map<string, TipType> | null) {
+  constructor(
+    themeConfig: Map<string, TipType> | null,
+    type: IType | null = 'less',
+  ) {
     if (themeConfig) {
       themeConfig.forEach((theme, key) => {
         const { value, comment } = theme;
@@ -14,7 +18,9 @@ export default class CompletionProvider implements vscode.CompletionItemProvider
           insertText: new vscode.SnippetString(`@${key};`)
         });
       });
+      console.log('----this.themeConfig-', this.themeConfig);
     }
+    this.type = type;
   }
 
   provideCompletionItems(
@@ -23,9 +29,15 @@ export default class CompletionProvider implements vscode.CompletionItemProvider
     token: vscode.CancellationToken,
     context: vscode.CompletionContext,
   ) {
-    if (doc.languageId !== 'less') {
+    if (doc.languageId !== this.type) {
       return [] as any;
     }
+
+    // TODO last char ; detect
+    // const lastChar = doc.getWordRangeAtPosition(pos.translate(0, -1));
+    // console.log('---lastChar-', doc.getText(lastChar));
+
+
     return this.themeConfig;
   }
   resolveCompletionItem(item: vscode.CompletionItem, token: vscode.CancellationToken) {
