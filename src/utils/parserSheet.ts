@@ -1,4 +1,5 @@
 import * as postcss from 'postcss';
+import { resolveModule } from './plugin';
 import { TipType } from '../types';
 
 interface ChildNode extends postcss.AtRule {
@@ -6,14 +7,21 @@ interface ChildNode extends postcss.AtRule {
   variable: boolean;
 }
 
-const translate = async (sheet: string): Promise<Map<string, TipType>> => {
+const translate = async (sheet: string, themePath: string): Promise<Map<string, TipType>> => {
   const lessSyntax = require('postcss-less');
-  const cssAST: postcss.Result = await postcss().process(sheet, {
-    syntax: lessSyntax,
-  });
+  const postcssImport = require('postcss-import');
+
+  const cssAST: postcss.Result = await postcss()
+    .use(resolveModule())
+    .use(postcssImport())
+    .process(sheet, {
+      syntax: lessSyntax,
+      from: themePath,
+    });
   const themeMappings: Map<string, TipType> = new Map();
   if (cssAST.root && Array.isArray(cssAST.root.nodes)) {
     cssAST.root.nodes.forEach((childNode) => {
+      // console.log('---childNode-', childNode);
       const { type, name, value, variable } = childNode as ChildNode;
       const prevNode = childNode.prev();
       if (variable && type === 'atrule') {
@@ -26,6 +34,7 @@ const translate = async (sheet: string): Promise<Map<string, TipType>> => {
       }
     });
   }
+  // deep resolve theme Value
   themeMappings.forEach((item, theme) => {
     const { value } = item;
     if (value && value.indexOf('@') > -1) {

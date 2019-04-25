@@ -54,7 +54,7 @@ export default class LoadTheme {
   public async parserTheme(config: IConfig) {
     const themePath = this.getThemePath(config.theme);
     const paletteLess = fs.readFileSync(themePath, 'utf8');
-    const palette = await parserSheet(paletteLess);
+    const palette = await parserSheet(paletteLess, themePath);
     console.log('----palette-', palette);
     return palette;
   }
