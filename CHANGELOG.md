@@ -1,5 +1,10 @@
 
-0.0.6 / 2019-04-25
+0.0.8 / 2019-04-27
+==================
+
+  * docs: add readme.md
+
+0.0.6/0.0.7 / 2019-04-25
 ==================
 
   * feat: support @import deep resolve theme vars

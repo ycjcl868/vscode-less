@@ -3,7 +3,7 @@
   "displayName": "vscode-lessTheme",
   "description": "Advanced autocompletion and refactoring support for Less",
   "icon": "",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "ycjcl868",
   "homepage": "https://github.com/ycjcl868/vscode-less/blob/master/README.md",
   "repository": {
